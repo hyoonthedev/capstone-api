@@ -9,6 +9,10 @@ router
     .get(recipeController.getFeaturedRecipes);
 
 router
+    .route('/search')
+    .post(recipeController.getSearchedRecipe);
+
+router
     .route('/:id')
     .get(recipeController.getSelectedRecipe);
 
