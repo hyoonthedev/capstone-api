@@ -8,6 +8,11 @@
       table.string("ingredient_name").notNullable();
       table.string("category").notNullable();
       table.string("expiry").notNullable();
+      table
+        .uuid("user_id")
+        .references("users.id")
+        .onUpdate("CASCADE")
+        .onDelete("CASCADE")
       table.timestamps(true, true);
     })
   };

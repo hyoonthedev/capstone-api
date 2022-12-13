@@ -6,7 +6,8 @@ exports.addNewIngredient = (req, res) => {
     const validation =
     body.ingredient_name &&
     body.category &&
-    body.expiry;
+    body.expiry &&
+    body.user_id;
 
     if(!validation) {
         return res.status(400).send("Please make sure to provide ingredient name, category and expiry fields in request")
@@ -32,15 +33,11 @@ exports.addNewIngredient = (req, res) => {
 
 // Get Saved Ingredients
 exports.getIngredientsList = (req, res) => {
+    console.log(req.params.userId)
     knex("ingredients")
-        .select(
-            "ingredient_name",
-            "category",
-            "expiry",
-            "id"
-        )
+        .where({ user_id: req.params.userId })
         .then((data) => {
-            res.status(200).json(data);
+            res.status(200).send(data);
         })
         .catch((err) => {
             res.status(400).send(`Error retrieving ingredients: ${err}`);

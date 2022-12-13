@@ -3,14 +3,9 @@ const express = require('express');
 const router = express.Router();
 const recipeController = require('../controllers/recipeController');
 
-
 router
-    .route('/featured')
-    .get(recipeController.getFeaturedRecipes);
-
-router
-    .route('/search')
-    .post(recipeController.getSearchedRecipe);
+    .route('/:userId/search')
+    .get(recipeController.getSearchedRecipe);
 
 router
     .route('/:id')

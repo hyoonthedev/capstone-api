@@ -5,7 +5,7 @@ const router = express.Router();
 const ingredientController = require("../controllers/ingredientController");
 
 router
-    .route('/')
+    .route('/user/:userId')
     .get(ingredientController.getIngredientsList)
     .post(ingredientController.addNewIngredient);
 

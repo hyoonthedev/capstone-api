@@ -29,20 +29,15 @@ exports.addIngredientsToIngredientList = (req, res) => {
 
 // GET pantry list
 exports.getPantryList = (req, res) => {
-    knex('pan')
-        .select(
-            "ingredient_name",
-            "category",
-            "expiry",
-            "id"
-        )
-        .then((data) => {
-            res.status(200).json(data);
-        })
-        .catch((err) => {
-            res.status(400).send(`Error retrieving ingredients: ${err}`);
-        });
-    }
+    knex("pan")
+    .where({ user_id: req.params.userId })
+    .then((data) => {
+        res.status(200).send(data);
+    })
+    .catch((err) => {
+        res.status(400).send(`Error retrieving ingredients: ${err}`);
+    })
+}
 
 // DELETE all ingredients from pantry list
 exports.deletePantry = (_req, res) => {

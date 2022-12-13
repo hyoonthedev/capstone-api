@@ -5,7 +5,7 @@ const router = express.Router();
 const ingredientController = require("../controllers/pantryController");
 
 router
-    .route('/')
+    .route('/user/:userId')
     .get(ingredientController.getPantryList)
     .delete(ingredientController.deletePantry);
     
