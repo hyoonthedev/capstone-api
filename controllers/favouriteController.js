@@ -1,6 +1,7 @@
 const knex = require('knex')(require('../knexfile'));
 const { v4: uuid } = require("uuid");
 
+// Delete/Add Favourites
 exports.updateFavourite = (req, res) => {
     knex('favourites')
         .where({ user_id: req.params.userId})
@@ -37,9 +38,22 @@ exports.updateFavourite = (req, res) => {
         })
 }
 
-exports.uuid = (req, res) => {
-    knex('users')
+// Get List of Favourite Recipes from User
+exports.getFavouriteList = (req, res) => {
+    knex('favourites')
+        .join('recipes', 'recipes.id', 'favourites.recipe_id')
+        .where({ user_id: req.params.userId })
+        .select(
+            "recipe_id",
+            "status",
+            "recipe_name",
+            "image_url",
+            "cuisine"
+        )
         .then((data) => {
-            res.send(uuid())
+            res.send(data)
+        })
+        .catch((err) => {
+            console.log(err)
         })
 }

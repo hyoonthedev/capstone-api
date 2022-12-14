@@ -1,3 +1,5 @@
+const { reduce } = require('../seed_data/recipesData');
+
 const knex = require('knex')(require('../knexfile'));
 
 // Add Ingredients to IngredientList (Delete from Pan)
@@ -40,15 +42,14 @@ exports.getPantryList = (req, res) => {
 }
 
 // DELETE all ingredients from pantry list
-exports.deletePantry = (_req, res) => {
+exports.deletePantry = (req, res) => {
     knex('pan')
         .del()
-        .then((_data) => {
-            res.status(201).json({
-                message: `Successfully removed all ingredients from pantry`
-            })
+        .where({ user_id: req.params.userId })
+        .then((data) => {
+            res.status(200).send("Pantry successfully cleared")
         })
-        .catch((err) => {
-            console.log(err)
-        })
+       .catch((err) => {
+        console.log(err)
+       })
 }

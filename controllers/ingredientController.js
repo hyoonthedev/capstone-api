@@ -33,7 +33,6 @@ exports.addNewIngredient = (req, res) => {
 
 // Get Saved Ingredients
 exports.getIngredientsList = (req, res) => {
-    console.log(req.params.userId)
     knex("ingredients")
         .where({ user_id: req.params.userId })
         .then((data) => {

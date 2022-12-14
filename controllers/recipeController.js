@@ -40,6 +40,9 @@ exports.getSelectedRecipe = (req, res) => {
             })
             res.send(newRecipe)
         })
+        .catch((err) => {
+            console.log(err)
+        })
 }
 
 // Filter Recipe by ingredients (requires filter = array of ingredients to filter)
