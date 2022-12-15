@@ -1,16 +1,5 @@
 const knex = require('knex')(require('../knexfile'));
 
-// Encode API Data
-const config = {
-    headers:{
-        'Accept-Encoding': 'application/json',
-    }
-};
-
-// Variables
-const axios = require('axios');
-const { API_URL, API_KEY, APP_KEY } = process.env;
-
 // GET Selected Recipe
 exports.getSelectedRecipe = (req, res) => {
     knex('recipes')
@@ -101,13 +90,15 @@ exports.getSearchedRecipe = (req, res) => {
             "ingredients_base",
         )
         .then((data) => {
-            const newRecipeList = data.map(item => { // Refactored ingredient names without "%20"
+            return data.map(item => { // Refactored ingredient names without "%20"
                 let ingredients_base = item.ingredients_base.split("%20")
                 return {
                     ...item,
                     ingredients_base
                 }
             })
+        })
+        .then((newRecipeList) => {
             knex('pan')
                 .where({ user_id: req.params.userId })
                 .select(
@@ -118,11 +109,11 @@ exports.getSearchedRecipe = (req, res) => {
                         return item["ingredient_name"]
                     })
                     if(filter.length === 0) { // If nothing in filter, return empty recipe list
-                        res.send([])
+                        return ([])
+                    } else {
+                        const arr = filterRecipe(newRecipeList, filter) // Filter recipe containing panlist
+                        return removeUD(arr) // Remove undefined results
                     }
-                    const arr = filterRecipe(newRecipeList, filter) // Filter recipe containing panlist
-                   return removeUD(arr) // Remove undefined results
-
                 })
                 .then((array) => {
                     knex('favourites')
@@ -131,13 +122,15 @@ exports.getSearchedRecipe = (req, res) => {
                             const finalArray = favFilter(array, data)
                             res.send(finalArray) // See if recipe is favourited
                         })
+                        .catch((err)=> {
+                            console.log(err)
+                        })
                 })
                 .catch((err) => {
                     console.log(err)
                 })
-
-        })
-        .catch((err) => {
-            console.log(err)
+                })
+                .catch((err) => {
+                    console.log(err)
         })
 }
